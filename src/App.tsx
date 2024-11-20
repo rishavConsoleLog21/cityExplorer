@@ -20,7 +20,9 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{title: 'City Explorer'}}
+          options={{
+            headerShown: false,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

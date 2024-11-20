@@ -11,7 +11,6 @@ type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 const Home = ({navigation}: HomeProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Welcome to City Explorer!</Text>
       <Login />
     </View>
   );
