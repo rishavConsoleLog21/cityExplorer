@@ -1,5 +1,16 @@
-import {View, Text, TextInput, StyleSheet} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ToastAndroid,
+  Pressable,
+} from 'react-native';
+import React, {useState} from 'react';
+
+// Firebase
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../../lib/FirebaseConfig';
 
 // Navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -13,6 +24,30 @@ type SignUpProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 const SignUp = ({route}: SignUpProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onCreateAccount = () => {
+    if (fullName === '' && email === '' && password === '') {
+      ToastAndroid.show('Please fill all the fields', ToastAndroid.SHORT);
+      return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        // Signed up
+        const user = userCredential.user;
+        navigation.replace('SignIn');
+        // ...
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        // ..
+      });
+  };
 
   return (
     <View
@@ -34,11 +69,19 @@ const SignUp = ({route}: SignUpProps) => {
       </Text>
       {/* Full Name */}
       <View style={{marginTop: 50}}>
-        <TextInput placeholder="Enter your Full Name" style={styles.input} />
+        <TextInput
+          placeholder="Enter your Full Name"
+          style={styles.input}
+          onChangeText={value => setFullName(value)}
+        />
       </View>
       {/* Email */}
       <View style={{marginTop: 20}}>
-        <TextInput placeholder="Enter your Email" style={styles.input} />
+        <TextInput
+          placeholder="Enter your Email"
+          style={styles.input}
+          onChangeText={value => setEmail(value)}
+        />
       </View>
       {/* Password */}
       <View style={{marginTop: 20}}>
@@ -46,22 +89,25 @@ const SignUp = ({route}: SignUpProps) => {
           placeholder="Enter your Password"
           style={styles.input}
           secureTextEntry={true}
+          onChangeText={value => setPassword(value)}
         />
       </View>
       {/* Sign Un Button */}
       <View style={{marginTop: 20}}>
-        <Text
-          style={{
-            backgroundColor: 'lawngreen',
-            color: 'black',
-            padding: 15,
-            textAlign: 'center',
-            borderRadius: 15,
-            fontSize: 20,
-            fontWeight: 'bold',
-          }}>
-          Create Account
-        </Text>
+        <Pressable onPress={onCreateAccount}>
+          <Text
+            style={{
+              backgroundColor: 'lawngreen',
+              color: 'black',
+              padding: 15,
+              textAlign: 'center',
+              borderRadius: 15,
+              fontSize: 20,
+              fontWeight: 'bold',
+            }}>
+            Create Account
+          </Text>
+        </Pressable>
         <Text
           style={{
             textAlign: 'center',

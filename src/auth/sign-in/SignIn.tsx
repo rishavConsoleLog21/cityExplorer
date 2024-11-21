@@ -1,5 +1,16 @@
-import {View, Text, TextInput, StyleSheet} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  ToastAndroid,
+} from 'react-native';
+import React, {useState} from 'react';
+
+// Firebase
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../../lib/FirebaseConfig';
 
 // Navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -11,8 +22,39 @@ import {Colors} from '../../constants/Colors';
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 const SignIn = ({route}: SignInProps) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const onSignIn = () => {
+    if (email === '' && password === '') {
+      ToastAndroid.show('Please fill all the fields', ToastAndroid.SHORT);
+      return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        navigation.replace('Home');
+        // ...
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        if (errorCode === 'auth/user-not-found') {
+          ToastAndroid.show('User not found', ToastAndroid.SHORT);
+        } else if (errorCode === 'auth/invalid-credential') {
+          ToastAndroid.show('Invalid Email or Password', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
+        }
+      });
+  };
 
   return (
     <View
@@ -43,7 +85,11 @@ const SignIn = ({route}: SignInProps) => {
       </Text>
       {/* Email */}
       <View style={{marginTop: 50}}>
-        <TextInput placeholder="Enter your Email" style={styles.input} />
+        <TextInput
+          placeholder="Enter your Email"
+          style={styles.input}
+          onChangeText={value => setEmail(value)}
+        />
       </View>
       {/* Password */}
       <View style={{marginTop: 20}}>
@@ -51,22 +97,25 @@ const SignIn = ({route}: SignInProps) => {
           placeholder="Enter your Password"
           style={styles.input}
           secureTextEntry={true}
+          onChangeText={value => setPassword(value)}
         />
       </View>
       {/* Sign In Button */}
       <View style={{marginTop: 20}}>
-        <Text
-          style={{
-            backgroundColor: 'lawngreen',
-            color: 'black',
-            padding: 15,
-            textAlign: 'center',
-            borderRadius: 15,
-            fontSize: 20,
-            fontWeight: 'bold',
-          }}>
-          Sign In
-        </Text>
+        <Pressable onPress={onSignIn}>
+          <Text
+            style={{
+              backgroundColor: 'lawngreen',
+              color: 'black',
+              padding: 15,
+              textAlign: 'center',
+              borderRadius: 15,
+              fontSize: 20,
+              fontWeight: 'bold',
+            }}>
+            Sign In
+          </Text>
+        </Pressable>
         <Text
           style={{
             textAlign: 'center',

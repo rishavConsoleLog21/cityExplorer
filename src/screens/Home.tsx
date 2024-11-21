@@ -4,14 +4,13 @@ import React from 'react';
 // Navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../App';
-import Login from '../components/Login';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({navigation}: HomeProps) => {
   return (
     <View style={styles.container}>
-      <Login />
+      <Text style={styles.header}>Home Screen</Text>
     </View>
   );
 };
@@ -21,7 +20,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ff2',
     alignItems: 'center',
   },
   header: {
