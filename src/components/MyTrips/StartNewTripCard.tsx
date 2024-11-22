@@ -2,7 +2,16 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const StartNewTripCard = () => {
+// Navigation
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootTabParamList} from '../../screens/Home';
+
+type StartNewTripCardProps = NativeStackScreenProps<
+  RootTabParamList,
+  'StartNewTripCard'
+>;
+
+const StartNewTripCard = ({navigation}: StartNewTripCardProps) => {
   return (
     <View
       style={{
@@ -32,6 +41,9 @@ const StartNewTripCard = () => {
         new trip.
       </Text>
       <Pressable
+        onPress={() => {
+          navigation.navigate('Search');
+        }}
         style={{
           padding: 10,
           borderRadius: 10,

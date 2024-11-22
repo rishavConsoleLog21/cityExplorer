@@ -14,6 +14,8 @@ export type RootTabParamList = {
   Explorer: undefined;
   Mytrips: undefined;
   Profile: undefined;
+  StartNewTripCard: undefined;
+  Search: undefined;
 };
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -31,7 +33,7 @@ const Home = ({navigation}: HomeProps) => {
         name="Explorer"
         component={Explorer}
         options={{
-          tabBarIcon: ({color, size, focused}) => (
+          tabBarIcon: ({size}) => (
             <Icon name={'search'} size={size} color="#38CC77" />
           ),
         }}

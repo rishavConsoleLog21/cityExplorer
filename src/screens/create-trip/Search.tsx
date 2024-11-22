@@ -1,18 +1,20 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {RootTabParamList} from '../Home';
+
+// Navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App';
 
-type ExplorerProps = NativeStackScreenProps<RootTabParamList, 'Explorer'>;
+type SearchProps = NativeStackScreenProps<RootStackParamList, 'Search'>;
 
-const Explorer = ({navigation}: ExplorerProps) => {
+const Search = ({route}: SearchProps) => {
   return (
     <View>
-      <Text>Explorer</Text>
+      <Text>Search</Text>
     </View>
   );
 };
 
-export default Explorer;
+export default Search;
 
 const styles = StyleSheet.create({});
